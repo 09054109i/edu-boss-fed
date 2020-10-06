@@ -9,11 +9,17 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+const b = '2'
+console.log(b)
+
+interface Foo{
+  a: string
+  b: number
+}
 
 @Component
 export default class App extends Vue {
   a = 1
-  b = '2'
   test () {
     console.log('test')
   }
