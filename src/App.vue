@@ -2,14 +2,7 @@
   <div id="app">
     <h1>拉钩教育</h1>
     <router-view/>
-    <el-row>
-      <el-button>默认按钮</el-button>
-      <el-button type="primary">主要按钮</el-button>
-      <el-button type="success">成功按钮</el-button>
-      <el-button type="info">信息按钮</el-button>
-      <el-button type="warning">警告按钮</el-button>
-      <el-button type="danger">危险按钮</el-button>
-    </el-row>
+    <p class="text">hello world</p>
   </div>
 </template>
 
@@ -21,4 +14,8 @@ export default Vue.extend({
 })
 </script>
 <style lang="scss" scoped>
+// @import "~@/styles/variables.scss";
+  .text {
+    color: $primary-color
+  }
 </style>
