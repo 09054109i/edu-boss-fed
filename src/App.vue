@@ -1,29 +1,24 @@
 <template>
   <div id="app">
     <h1>拉钩教育</h1>
-    <div>{{a}}</div>
     <router-view/>
+    <el-row>
+      <el-button>默认按钮</el-button>
+      <el-button type="primary">主要按钮</el-button>
+      <el-button type="success">成功按钮</el-button>
+      <el-button type="info">信息按钮</el-button>
+      <el-button type="warning">警告按钮</el-button>
+      <el-button type="danger">危险按钮</el-button>
+    </el-row>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import Component from 'vue-class-component'
-const b = '2'
-console.log(b)
 
-interface Foo{
-  a: string
-  b: number
-}
-
-@Component
-export default class App extends Vue {
-  a = 1
-  test () {
-    console.log('test')
-  }
-}
+export default Vue.extend({
+  name: 'App'
+})
 </script>
 <style lang="scss" scoped>
 </style>
