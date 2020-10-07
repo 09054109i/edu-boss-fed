@@ -24,7 +24,7 @@
 import Vue from 'vue'
 import request from '@/utils/request.ts'
 import { Form } from 'element-ui'
-import qs from 'qs'
+import { login } from '@/services/user'
 
 export default Vue.extend({
   name: 'LoginIndex',
@@ -54,12 +54,7 @@ export default Vue.extend({
         await (this.$refs.form as Form).validate()
         this.isLoginLoading = true
         // 2、验证通过，提交表单
-        const { data } = await request({
-          method: 'POST',
-          url: '/front/user/login',
-          headers: { 'content-type': 'application/x-www-form-urlencoded' },
-          data: qs.stringify(this.form)
-        })
+        const { data } = await login(this.form)
         // 3、处理请求结果
         // 失败：给出提示
         if (data.state !== 1) {
