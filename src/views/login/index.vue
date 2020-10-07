@@ -1,10 +1,13 @@
 <template>
  <div class="login">
-  <el-form label-position="top"
-            ref="form"
-            :model="form"
-            :rules="rules"
-            label-width="80px">
+  <el-form
+    class="login-form"
+    label-position="top"
+    ref="form"
+    :model="form"
+    :rules="rules"
+    label-width="80px"
+  >
     <el-form-item label="手机号" prop="phone">
       <el-input v-model="form.phone"></el-input>
     </el-form-item>
@@ -12,7 +15,7 @@
       <el-input type="password" v-model="form.password"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button class="login-btn" type="primary" @click="onSubmit">登录</el-button>
+      <el-button :loading="isLoginLoading" class="login-btn" type="primary" @click="onSubmit">登录</el-button>
     </el-form-item>
   </el-form>
  </div>
@@ -20,8 +23,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import request from '@/utils/request.ts'
-import qs from 'qs'
 import { Form } from 'element-ui'
+import qs from 'qs'
 
 export default Vue.extend({
   name: 'LoginIndex',
@@ -40,14 +43,16 @@ export default Vue.extend({
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 11, message: '长度在 6 到 11 个字符', trigger: 'blur' }
         ]
-      }
+      },
+      isLoginLoading: false
     }
   },
   methods: {
     async onSubmit () {
       try {
         // 1、表单验证，
-        await (this.$refs.from as Form).validate()
+        await (this.$refs.form as Form).validate()
+        this.isLoginLoading = true
         // 2、验证通过，提交表单
         const { data } = await request({
           method: 'POST',
@@ -55,7 +60,6 @@ export default Vue.extend({
           headers: { 'content-type': 'application/x-www-form-urlencoded' },
           data: qs.stringify(this.form)
         })
-        console.log(data)
         // 3、处理请求结果
         // 失败：给出提示
         if (data.state !== 1) {
@@ -69,6 +73,7 @@ export default Vue.extend({
       } catch (err) {
         console.log('登录失败', err)
       }
+      this.isLoginLoading = false
     }
   }
 })
