@@ -29,7 +29,7 @@ export default Vue.extend({
 <style scoped lang = "scss">
   .el-container{
     min-height: 100vh;
-    min-width: 980px;
+    /* min-width: 980px; */
   }
   .el-aside{
     background: #d3dce6;
