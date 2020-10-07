@@ -1,9 +1,11 @@
 <template>
-  <div id="app">
-    <h1>拉钩教育</h1>
-    <router-view/>
-    <p class="text">hello world</p>
-  </div>
+  <el-container>
+    <el-aside width="200px">Aside</el-aside>
+    <el-container>
+      <el-header>Header</el-header>
+      <el-main>Main</el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script lang="ts">
@@ -18,12 +20,21 @@ request({
 })
 
 export default Vue.extend({
-  name: 'App'
+  name: 'LayoutIndex'
 })
 </script>
 <style lang="scss" scoped>
-// @import "~@/styles/variables.scss";
-  .text {
-    color: $primary-color
+  .el-container{
+    min-height: 100vh;
+    min-width: 980px;
+  }
+  .el-aside{
+    background: #d3dce6;
+  }
+  .el-header{
+    background: #b3c0d1;
+  }
+  .el-main{
+    background: #e9eef3;
   }
 </style>
