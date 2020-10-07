@@ -33,15 +33,23 @@ export default Vue.extend({
       console.log('submit!')
       // 1、表单验证
       // 2、验证通过，提交表单
-      const data = await request({
+      const { data } = await request({
         method: 'POST',
         url: '/front/user/login',
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
         data: qs.stringify(this.form)
       })
       console.log(data)
       // 3、处理请求结果
-      // 成功：跳转到首页
       // 失败：给出提示
+      if (data.state !== 1) {
+        return this.$message.error(data.message)
+      }
+      // 成功：跳转到首页
+      this.$router.push({
+        name: 'home'
+      })
+      this.$message.success('登录成功')
     }
   }
 })
