@@ -73,7 +73,12 @@ router.beforeEach((to, from, next) => {
   // 父路由和子路由只要有一个需要认证，则验证登录信息
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!store.state.user) {
-      next('/login')
+      next({
+        name: 'login',
+        query: {
+          redirect: to.fullPath
+        }
+      })
     } else {
       next()
     }

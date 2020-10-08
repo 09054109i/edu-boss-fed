@@ -61,9 +61,7 @@ export default Vue.extend({
         } else {
           // 成功：跳转到首页
           this.$store.commit('setUser', data.content)
-          this.$router.push({
-            name: 'home'
-          })
+          this.$router.push(this.$route.query.redirect as string || '/')
           this.$message.success('登录成功')
         }
       } catch (err) {
