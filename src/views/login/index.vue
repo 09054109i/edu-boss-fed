@@ -22,7 +22,6 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import request from '@/utils/request.ts'
 import { Form } from 'element-ui'
 import { login } from '@/services/user'
 
@@ -58,13 +57,14 @@ export default Vue.extend({
         // 3、处理请求结果
         // 失败：给出提示
         if (data.state !== 1) {
-          return this.$message.error(data.message)
+          this.$message.error(data.message)
+        } else {
+          // 成功：跳转到首页
+          this.$router.push({
+            name: 'home'
+          })
+          this.$message.success('登录成功')
         }
-        // 成功：跳转到首页
-        this.$router.push({
-          name: 'home'
-        })
-        this.$message.success('登录成功')
       } catch (err) {
         console.log('登录失败', err)
       }

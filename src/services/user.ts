@@ -11,6 +11,6 @@ interface User {
 export const login = (data: User) => request({
   method: 'POST',
   url: '/front/user/login',
-  headers: { 'content-type': 'application/x-www-form-urlencoded' },
+  // headers: { 'content-type': 'application/x-www-form-urlencoded' },
   data: qs.stringify(data)
 })
