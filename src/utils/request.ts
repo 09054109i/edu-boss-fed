@@ -10,7 +10,10 @@ const request = axios.create({
 // 请求拦截器
 request.interceptors.request.use(function (config) {
   // Do something before request is sent
-  config.headers.Authorization = store.state.user.access_token
+  const user = store.state.user
+  if (user && user.access_token) {
+    config.headers.Authorization = user.access_token
+  }
   return config
 }, function (error) {
   // Do something with request error
