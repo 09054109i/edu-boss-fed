@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Layout from '@/layout/index.vue'
+import store from '@/store'
+
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -12,6 +14,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     component: Layout,
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',
@@ -52,18 +55,31 @@ const routes: Array<RouteConfig> = [
         path: '/advert-space',
         name: 'advert-space',
         component: () => import(/* webpackChunkName: 'advert-space' */'@/views/advert-space/index.vue')
-      },
-      {
-        path: '*',
-        name: '404',
-        component: () => import(/* webpackChunkName: '404' */'@/views/error-page/404.vue')
       }
     ]
+  },
+  {
+    path: '*',
+    name: '404',
+    component: () => import(/* webpackChunkName: '404' */'@/views/error-page/404.vue')
   }
 ]
 
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  // 父路由和子路由只要有一个需要认证，则验证登录信息
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.state.user) {
+      next('/login')
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 
 export default router
