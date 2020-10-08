@@ -60,6 +60,7 @@ export default Vue.extend({
           this.$message.error(data.message)
         } else {
           // 成功：跳转到首页
+          this.$store.commit('setUser', data.content)
           this.$router.push({
             name: 'home'
           })
