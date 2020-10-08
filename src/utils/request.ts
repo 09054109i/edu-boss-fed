@@ -20,5 +20,15 @@ request.interceptors.request.use(function (config) {
   return Promise.reject(error)
 })
 // 响应拦截器
-
+// Add a response interceptor
+request.interceptors.response.use(function (response) { // 状态码为2XX都进入这里
+  console.log('响应成功')
+  // 服务端使用过的自定义状态码，错误处理就写到这里
+  return response
+}, function (error) { // 超出2XX状态码都执行这里
+  // 服务端使用过的HTTP状态码，错误处理就写到这里
+  console.log('响应失败')
+  // 将错误信息抛给调用者
+  return Promise.reject(error)
+})
 export default request
