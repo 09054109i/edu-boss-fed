@@ -26,7 +26,7 @@ export default Vue.extend({
   name: 'AppHeader',
   data () {
     return {
-      userInfo: null
+      userInfo: {}
     }
   },
   created () {
