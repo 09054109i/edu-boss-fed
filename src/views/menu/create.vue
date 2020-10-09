@@ -9,7 +9,7 @@
                     <el-input v-model="form.name"></el-input>
                 </el-form-item>
                 <el-form-item label="菜单路径:">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="form.href"></el-input>
                 </el-form-item>
                 <el-form-item label="上级菜单:">
                     <el-select v-model="form.region" placeholder="请选择活动区域">
@@ -18,19 +18,19 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="描述:">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="form.description"></el-input>
                 </el-form-item>
                 <el-form-item label="前端图标:">
-                    <el-input v-model="form.name"></el-input>
+                    <el-input v-model="form.icon"></el-input>
                 </el-form-item>
                 <el-form-item label="是否显示:">
-                    <el-radio-group v-model="form.resource">
+                    <el-radio-group v-model="form.shown">
                     <el-radio label="是"></el-radio>
                     <el-radio label="否"></el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="活动形式:">
-                    <el-input type="textarea" v-model="form.desc"></el-input>
+                    <el-input type="textarea" v-model="form.description"></el-input>
                 </el-form-item>
                 <el-form-item label="排序:">
                     <el-input-number v-model="form.orderNum" :min="1" label="描述文字"></el-input-number>
@@ -50,14 +50,13 @@ export default Vue.extend({
   data () {
     return {
       form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        description: '111',
+        href: '111',
+        icon: '1111',
+        name: '111',
+        orderNum: '1',
+        parentId: -1,
+        shown: false
       }
     }
   },
