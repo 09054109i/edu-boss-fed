@@ -29,9 +29,6 @@
                     <el-radio label="否"></el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="活动形式:">
-                    <el-input type="textarea" v-model="form.description"></el-input>
-                </el-form-item>
                 <el-form-item label="排序:">
                     <el-input-number v-model="form.orderNum" :min="1" label="描述文字"></el-input-number>
                 </el-form-item>
@@ -45,6 +42,8 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
+import { createOrUpdateMenu } from '@/services/menu'
+
 export default Vue.extend({
   name: 'MenuCreate',
   data () {
@@ -61,8 +60,12 @@ export default Vue.extend({
     }
   },
   methods: {
-    onSubmit () {
-      console.log('submit!')
+    async onSubmit () {
+      const { data } = await createOrUpdateMenu(this.form)
+      if (data.code === '000000') {
+        this.$message.success('提交成功')
+        this.$router.back()
+      }
     }
   }
 })
