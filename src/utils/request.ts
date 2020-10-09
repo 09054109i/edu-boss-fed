@@ -83,11 +83,12 @@ request.interceptors.response.use(function (response) { // 状态码为2XX都进
         })
       }
       // 挂起所有请求
-      return new Promise(resolve => {
+      const promise = new Promise(resolve => {
         requests.push(() => {
           resolve(request(error.config))
         })
       })
+      return promise
     } else if (status === 403) {
       Message.error('没有权限，请联系管理员')
     } else if (status === 404) {
