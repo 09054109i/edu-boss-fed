@@ -76,6 +76,14 @@ export default Vue.extend({
         console.log(err)
         this.$message.info('取消删除')
       })
+    },
+    handleEdit (row: any) {
+      this.$router.push({
+        name: 'menu-edit',
+        params: {
+          id: row.id
+        }
+      })
     }
   }
 })
