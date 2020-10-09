@@ -2,7 +2,7 @@
     <div class="menu-create">
         <el-card class="box-card">
             <div slot="header" class="clearfix">
-                <span>创建菜单</span>
+                <span>{{ isEdit? '编辑菜单' : '创建菜单'}}</span>
             </div>
             <el-form ref="form" :model="form" label-width="80px">
                 <el-form-item label="菜单名称:">
@@ -40,7 +40,9 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">提交</el-button>
-                    <el-button>取消</el-button>
+                    <el-button
+                        v-if="!isEdit"
+                    >重置</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
