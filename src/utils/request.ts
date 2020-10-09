@@ -19,6 +19,16 @@ function redirectLogin () {
   })
 }
 
+function refreshToken () {
+  return axios.create()({
+    method: 'POST',
+    url: '/front/user/refresh_token',
+    data: qs.stringify({
+      refreshtoken: store.state.user.refresh_token
+    })
+  })
+}
+
 // 请求拦截器
 request.interceptors.request.use(function (config) {
   // Do something before request is sent
@@ -33,6 +43,8 @@ request.interceptors.request.use(function (config) {
 })
 // 响应拦截器
 // Add a response interceptor
+let isRfreshing = false
+let requests: any[] = []
 request.interceptors.response.use(function (response) { // 状态码为2XX都进入这里
   // console.log('响应成功')
   // 服务端使用过的自定义状态码，错误处理就写到这里
@@ -51,23 +63,31 @@ request.interceptors.response.use(function (response) { // 状态码为2XX都进
         redirectLogin()
         return Promise.reject(error)
       }
-      try {
-        const { data } = await axios.create()({
-          method: 'POST',
-          url: '/front/user/refresh_token',
-          data: qs.stringify({
-            refreshtoken: store.state.user.refresh_token
-          })
+      if (!isRfreshing) {
+        isRfreshing = true
+        return refreshToken().then((res) => {
+          if (!res.data.state) {
+            throw new Error('Token 刷新失败')
+          }
+          // 获取成功，把本次的失败请求重新发出去
+          store.commit('setUser', res.data.content)
+          requests.forEach(cb => cb())
+          requests = []
+          // 失败请求的信息在error.config中
+          return request(error.config)
+        }).catch(err => {
+          redirectLogin()
+          return Promise.reject(err)
+        }).finally(() => {
+          isRfreshing = false
         })
-        // 获取成功，把本次的失败请求重新发出去
-        store.commit('setUser', data.content)
-        // 失败请求的信息在error.config中
-        return request(error.config)
-      } catch (err) {
-        // 获取失败，跳转回登录页面
-        redirectLogin()
-        return Promise.reject(error)
       }
+      // 挂起所有请求
+      return new Promise(resolve => {
+        requests.push(() => {
+          resolve(request(error.config))
+        })
+      })
     } else if (status === 403) {
       Message.error('没有权限，请联系管理员')
     } else if (status === 404) {
@@ -80,7 +100,7 @@ request.interceptors.response.use(function (response) { // 状态码为2XX都进
   } else { // 在设置请求时发生了一些事情，出发了一个错误
     Message.error(`请求失败： ${error.message}`)
   }
-  console.log(error.config)
+  // console.log(error.config)
   // 将错误信息抛给调用者
   return Promise.reject(error)
 })

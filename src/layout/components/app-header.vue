@@ -31,6 +31,8 @@ export default Vue.extend({
   },
   created () {
     this.loaderUserInfo()
+    this.loaderUserInfo()
+    this.loaderUserInfo()
   },
   methods: {
     async loaderUserInfo () {
