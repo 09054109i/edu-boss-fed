@@ -12,9 +12,15 @@
                     <el-input v-model="form.href"></el-input>
                 </el-form-item>
                 <el-form-item label="上级菜单:">
-                    <el-select v-model="form.region" placeholder="请选择活动区域">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
+                    <el-select v-model="form.parentId" placeholder="请选择活动区域">
+                        <el-option :value="-1" label="无上级菜单"></el-option>
+                        <el-option
+                            :key="item.id"
+                            :label="item.name"
+                            v-for="item in parentMenuList"
+                            :value="item.id"
+                        >
+                        </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="描述:">
@@ -25,8 +31,8 @@
                 </el-form-item>
                 <el-form-item label="是否显示:">
                     <el-radio-group v-model="form.shown">
-                    <el-radio label="是"></el-radio>
-                    <el-radio label="否"></el-radio>
+                    <el-radio :label="true">是</el-radio>
+                    <el-radio :label="false">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="排序:">
@@ -42,7 +48,7 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import { createOrUpdateMenu } from '@/services/menu'
+import { createOrUpdateMenu, getEditMenuInfo } from '@/services/menu'
 
 export default Vue.extend({
   name: 'MenuCreate',
@@ -56,8 +62,12 @@ export default Vue.extend({
         orderNum: '1',
         parentId: -1,
         shown: false
-      }
+      },
+      parentMenuList: []
     }
+  },
+  created () {
+    this.loadMenuInfo()
   },
   methods: {
     async onSubmit () {
@@ -65,6 +75,12 @@ export default Vue.extend({
       if (data.code === '000000') {
         this.$message.success('提交成功')
         this.$router.back()
+      }
+    },
+    async loadMenuInfo () {
+      const { data } = await getEditMenuInfo(-1)
+      if (data.code === '000000') {
+        this.parentMenuList = data.data.parentMenuList
       }
     }
   }
