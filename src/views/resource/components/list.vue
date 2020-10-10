@@ -2,12 +2,12 @@
  <div class="resource-list">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form :inline="true" :model="form" class="demo-form-inline">
             <el-form-item label="审批人">
-                <el-input v-model="formInline.user" placeholder="审批人"></el-input>
+                <el-input v-model="form.user" placeholder="审批人"></el-input>
             </el-form-item>
             <el-form-item label="活动区域">
-                <el-select v-model="formInline.region" placeholder="活动区域">
+                <el-select v-model="form.region" placeholder="活动区域">
                 <el-option label="区域一" value="shanghai"></el-option>
                 <el-option label="区域二" value="beijing"></el-option>
                 </el-select>
@@ -58,6 +58,15 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="form.current"
+        :page-sizes="[5, 10, 20, 30]"
+        :page-size="form.size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
     </el-card>
  </div>
 </template>
@@ -69,23 +78,37 @@ export default Vue.extend({
   name: 'ResourceList',
   data () {
     return {
-      formInline: {
+      form: {
         user: '',
-        region: ''
+        region: '',
+        current: 1,
+        size: 5
       },
-      resources: []
+      total: 0,
+      resources: [],
+      currentPage4: 5
     }
   },
   created () {
     this.loadResources()
   },
   methods: {
+    handleSizeChange (val: number) {
+      this.form.size = val
+      this.form.current = 1
+      this.loadResources()
+    },
+    handleCurrentChange (val: number) {
+      this.form.current = val
+      this.loadResources()
+    },
     onSubmit () {
       console.log('submit!')
     },
     async loadResources () {
-      const { data } = await getResourcePages({})
+      const { data } = await getResourcePages(this.form)
       this.resources = data.data.records
+      this.total = data.data.total
       this.resources = this.resources.map((item: any) => {
         item.createdTime = parseDate2Str(item.createdTime)
         return item
