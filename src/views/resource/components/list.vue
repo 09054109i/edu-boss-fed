@@ -18,21 +18,44 @@
         </el-form>
       </div>
        <el-table
-        :data="tableData"
+        :data="resources"
         style="width: 100%">
         <el-table-column
           prop="date"
-          label="日期"
-          width="180">
+          label="编号"
+          type="index"
+          >
         </el-table-column>
         <el-table-column
           prop="name"
-          label="姓名"
-          width="180">
+          label="资源名称"
+         >
         </el-table-column>
         <el-table-column
-          prop="address"
-          label="地址">
+          prop="url"
+          label="资源路径"
+          >
+        </el-table-column>
+        <el-table-column
+          prop="description"
+          label="描述"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="createdTime"
+          label="添加时间"
+        >
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.row)">删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </el-card>
@@ -40,6 +63,8 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
+import { getResourcePages } from '@/services/resource'
+import { parseDate2Str } from '@/utils/common'
 export default Vue.extend({
   name: 'ResourceList',
   data () {
@@ -48,28 +73,23 @@ export default Vue.extend({
         user: '',
         region: ''
       },
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      resources: []
     }
+  },
+  created () {
+    this.loadResources()
   },
   methods: {
     onSubmit () {
       console.log('submit!')
+    },
+    async loadResources () {
+      const { data } = await getResourcePages({})
+      this.resources = data.data.records
+      this.resources = this.resources.map((item: any) => {
+        item.createdTime = parseDate2Str(item.createdTime)
+        return item
+      })
     }
   }
 })
