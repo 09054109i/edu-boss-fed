@@ -3,13 +3,20 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <el-form :inline="true" :model="form" class="demo-form-inline">
-            <el-form-item label="审批人">
-                <el-input v-model="form.user" placeholder="审批人"></el-input>
+            <el-form-item label="资源名称">
+                <el-input v-model="form.name" placeholder="资源名称"></el-input>
             </el-form-item>
-            <el-form-item label="活动区域">
-                <el-select v-model="form.region" placeholder="活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+            <el-form-item label="资源路径">
+                <el-input v-model="form.url" placeholder="资源路径"></el-input>
+            </el-form-item>
+            <el-form-item label="资源分类">
+                <el-select v-model="form.categoryId" placeholder="资源分类">
+                <el-option
+                :label="category.name"
+                :value="category.id"
+                v-for = "category in resourceCategories"
+                :key = "category.id"
+                ></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item>
@@ -73,24 +80,28 @@
 <script lang="ts">
 import Vue from 'vue'
 import { getResourcePages } from '@/services/resource'
+import { getResourceCategories } from '@/services/resource-category'
+
 import { parseDate2Str } from '@/utils/common'
 export default Vue.extend({
   name: 'ResourceList',
   data () {
     return {
       form: {
-        user: '',
-        region: '',
+        name: '',
+        url: '',
+        categoryId: '',
         current: 1,
         size: 5
       },
       total: 0,
       resources: [],
-      currentPage4: 5
+      resourceCategories: []
     }
   },
   created () {
     this.loadResources()
+    this.loadResoucesCategory()
   },
   methods: {
     handleSizeChange (val: number) {
@@ -103,7 +114,8 @@ export default Vue.extend({
       this.loadResources()
     },
     onSubmit () {
-      console.log('submit!')
+      this.form.current = 1
+      this.loadResources()
     },
     async loadResources () {
       const { data } = await getResourcePages(this.form)
@@ -113,6 +125,10 @@ export default Vue.extend({
         item.createdTime = parseDate2Str(item.createdTime)
         return item
       })
+    },
+    async loadResoucesCategory () {
+      const { data } = await getResourceCategories()
+      this.resourceCategories = data.data
     }
   }
 })
