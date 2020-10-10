@@ -2,14 +2,14 @@
  <div class="resource-list">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <el-form :inline="true" :model="form" class="demo-form-inline">
-            <el-form-item label="资源名称">
+        <el-form ref="form" :inline="true" :model="form" class="demo-form-inline" @click="onReset">
+            <el-form-item prop="name" label="资源名称">
                 <el-input v-model="form.name" placeholder="资源名称"></el-input>
             </el-form-item>
-            <el-form-item label="资源路径">
+            <el-form-item prop="url" label="资源路径">
                 <el-input v-model="form.url" placeholder="资源路径"></el-input>
             </el-form-item>
-            <el-form-item label="资源分类">
+            <el-form-item prop="categoryId" label="资源分类">
                 <el-select v-model="form.categoryId" placeholder="资源分类">
                 <el-option
                 :label="category.name"
@@ -21,6 +21,9 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="onSubmit">查询</el-button>
+                <el-button
+                  @click="onReset"
+                >重置</el-button>
             </el-form-item>
         </el-form>
       </div>
@@ -83,6 +86,7 @@ import { getResourcePages } from '@/services/resource'
 import { getResourceCategories } from '@/services/resource-category'
 
 import { parseDate2Str } from '@/utils/common'
+import { Form } from 'element-ui'
 export default Vue.extend({
   name: 'ResourceList',
   data () {
@@ -104,6 +108,11 @@ export default Vue.extend({
     this.loadResoucesCategory()
   },
   methods: {
+    onReset () {
+      (this.$refs.form as Form).resetFields()
+      this.form.current = 1
+      this.loadResources()
+    },
     handleSizeChange (val: number) {
       this.form.size = val
       this.form.current = 1
