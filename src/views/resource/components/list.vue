@@ -20,16 +20,16 @@
                 </el-select>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">查询</el-button>
+                <el-button type="primary" @click="onSubmit" :disabled="isLoading">查询</el-button>
                 <el-button
                   @click="onReset"
-                >重置</el-button>
+                :disabled="isLoading">重置</el-button>
             </el-form-item>
         </el-form>
       </div>
        <el-table
         :data="resources"
-        style="width: 100%">
+        style="width: 100%"  v-loading="isLoading">
         <el-table-column
           prop="date"
           label="编号"
@@ -100,7 +100,8 @@ export default Vue.extend({
       },
       total: 0,
       resources: [],
-      resourceCategories: []
+      resourceCategories: [],
+      isLoading: false
     }
   },
   created () {
@@ -127,9 +128,11 @@ export default Vue.extend({
       this.loadResources()
     },
     async loadResources () {
+      this.isLoading = true
       const { data } = await getResourcePages(this.form)
       this.resources = data.data.records
       this.total = data.data.total
+      this.isLoading = false
       this.resources = this.resources.map((item: any) => {
         item.createdTime = parseDate2Str(item.createdTime)
         return item
