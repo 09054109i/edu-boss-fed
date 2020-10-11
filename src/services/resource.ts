@@ -11,3 +11,11 @@ export const getResourcePages = (data: any) => {
     data
   })
 }
+
+export const createOrUpdateResource = (data: any) => {
+  return request({
+    method: 'POST',
+    url: '/boss/resource/saveOrUpdate',
+    data
+  })
+}

@@ -27,6 +27,7 @@
             </el-form-item>
         </el-form>
       </div>
+      <CreateOrEdit />
        <el-table
         :data="resources"
         style="width: 100%"  v-loading="isLoading">
@@ -82,6 +83,8 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
+import CreateOrEdit from './CreateOrEdit.vue'
+
 import { getResourcePages } from '@/services/resource'
 import { getResourceCategories } from '@/services/resource-category'
 
@@ -89,6 +92,9 @@ import { parseDate2Str } from '@/utils/common'
 import { Form } from 'element-ui'
 export default Vue.extend({
   name: 'ResourceList',
+  components: {
+    CreateOrEdit
+  },
   data () {
     return {
       form: {
@@ -99,7 +105,7 @@ export default Vue.extend({
         size: 5
       },
       total: 0,
-      resources: [],
+      resources: [] as any[],
       resourceCategories: [],
       isLoading: false
     }
