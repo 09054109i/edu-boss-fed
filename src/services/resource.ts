@@ -19,3 +19,10 @@ export const createOrUpdateResource = (data: any) => {
     data
   })
 }
+
+export const deleteResource = (id: number) => {
+  return request({
+    method: 'DELETE',
+    url: `/boss/resource/${id}`
+  })
+}

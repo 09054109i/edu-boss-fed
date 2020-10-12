@@ -74,7 +74,6 @@ export default Vue.extend({
       if (data.code === '000000') {
         this.$message.success('提交成功')
         this.dialogFormVisible = false
-        this.$parent.$parent.loadResources()
       }
     }
   }
