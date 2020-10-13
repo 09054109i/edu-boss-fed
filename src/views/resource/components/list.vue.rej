@@ -1,4 +1,0 @@
-diff a/src/views/resource/components/list.vue b/src/views/resource/components/list.vue	(rejected hunks)
-@@ -215 +215 @@ export default Vue.extend({
--      this.newForm. = row
-+      this.newForm = row

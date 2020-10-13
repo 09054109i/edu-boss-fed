@@ -65,6 +65,11 @@ const routes: Array<RouteConfig> = [
         path: '/menu/:id/edit',
         name: 'menu-edit',
         component: () => import(/* webpackChunkName: 'menu-createoredit' */'@/views/menu/edit.vue')
+      },
+      {
+        path: '/resourceCategory',
+        name: 'resourceCategory',
+        component: () => import(/* webpackChunkName: 'resource' */'@/views/resourceCategory/index.vue')
       }
     ]
   },

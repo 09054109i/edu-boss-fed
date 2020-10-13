@@ -30,6 +30,8 @@
       <div slot="header" class="clearfix">
           <el-button @click="dialogFormVisible = true">
             添加菜单</el-button>
+          <el-button @click="onResourceCategoriesClick">
+            资源分类</el-button>
       </div>
       <el-dialog title="添加资源" :visible.sync="dialogFormVisible">
         <el-form ref="newForm" :model="newForm">
@@ -149,6 +151,11 @@ export default Vue.extend({
     this.loadResoucesCategory()
   },
   methods: {
+    onResourceCategoriesClick () {
+      this.$router.push({
+        name: 'resourceCategory'
+      })
+    },
     onReset () {
       (this.$refs.form as Form).resetFields()
       this.form.current = 1
@@ -173,10 +180,10 @@ export default Vue.extend({
       this.resources = data.data.records
       this.total = data.data.total
       this.isLoading = false
-      // this.resources = this.resources.map((item: any) => {
-      //   item.createdTime = parseDate2Str(item.createdTime)
-      //   return item
-      // })
+      this.resources = this.resources.map((item: any) => {
+        item.createdTime = parseDate2Str(item.createdTime)
+        return item
+      })
     },
     async loadResoucesCategory () {
       const { data } = await getResourceCategories()
@@ -189,11 +196,12 @@ export default Vue.extend({
         this.dialogFormVisible = false
         this.loadResources()
       }
+      this.newForm = { name: '', url: '', categoryId: '', description: '' };
       (this.$refs.newForm as Form).resetFields()
     },
     onResouceUpdateCancel () {
-      // (this.$refs.newForm as Form).resetFields()
-      console.log('test')
+      this.newForm = { name: '', url: '', categoryId: '', description: '' };
+      (this.$refs.newForm as Form).resetFields()
       this.dialogFormVisible = false
     },
     handleDelete (row: any) {
@@ -209,10 +217,9 @@ export default Vue.extend({
       })
     },
     handleEdit (row: any) {
-      console.log('edit clicked')
-
-      console.log(row)
-      this.newForm = row
+      const { id, name, url, categoryId, description } = row
+      const rowObject = { id, name, url, categoryId, description }
+      this.newForm = rowObject
       this.dialogFormVisible = true
     }
   }

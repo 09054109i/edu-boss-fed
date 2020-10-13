@@ -78,7 +78,7 @@ export default Vue.extend({
       })
     },
     handleEdit (row: any) {
-      this.$router.push({
+      (this as any).$router.push({
         name: 'menu-edit',
         params: {
           id: row.id
