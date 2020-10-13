@@ -12,6 +12,14 @@ export const createOrUpdateMenu = (data: any) => {
   })
 }
 
+export const allocateMenus = (data: any) => {
+  return request({
+    method: 'POST',
+    url: '/boss/menu/allocateRoleMenus',
+    data
+  })
+}
+
 export const getEditMenuInfo = (id: string | number = -1) => {
   return request({
     method: 'GET',
@@ -26,6 +34,23 @@ export const getAllMenus = () => {
   return request({
     method: 'GET',
     url: '/boss/menu/getAll'
+  })
+}
+
+export const getMenuNodeList = () => {
+  return request({
+    method: 'GET',
+    url: '/boss/menu/getMenuNodeList'
+  })
+}
+
+export const getRoleMenu = (roleId: string) => {
+  return request({
+    method: 'GET',
+    url: '/boss/menu/getRoleMenus',
+    params: {
+      roleId
+    }
   })
 }
 
