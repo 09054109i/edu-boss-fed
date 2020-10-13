@@ -31,7 +31,7 @@ export default Vue.extend({
   name: 'AllocMenu',
   data () {
     return {
-      menuNodes: [],
+      resourceNodes: [],
       defaultExpandedKeys: [] as any[],
       defaultCheckedKeys: [] as any[],
       defaultProps: {
@@ -58,7 +58,7 @@ export default Vue.extend({
         (this.$refs.menuNodes as any).setCheckedKeys([])
       })
     },
-    async loadmMenuNodeList () {
+    async loadmResourceNodeList () {
       const { data } = await getMenuNodeList()
       if (data.code === '000000') {
         this.menuNodes = data.data

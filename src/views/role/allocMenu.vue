@@ -51,7 +51,9 @@ export default Vue.extend({
         menuIdList: checkedKeys,
         roleId: (this.$route as any).params.id
       })
-      console.log(data)
+      this.$router.push({
+        name: 'role'
+      })
     },
     handleClear () {
       this.$nextTick(() => {
