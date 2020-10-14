@@ -56,37 +56,33 @@ export default Vue.extend({
       })
     },
     handleClear () {
-      this.$nextTick(() => {
-        (this.$refs.menuNodes as any).setCheckedKeys([])
-      })
+      (this.$refs.menuNodes as any).setCheckedKeys([])
     },
     async loadmMenuNodeList () {
       const { data } = await getMenuNodeList()
       if (data.code === '000000') {
         this.menuNodes = data.data
-        // this.loadCheckedMenu()
       }
     },
     async loadCheckedMenu () {
       const roleId = (this.$route as any).params.id
       const { data } = await getRoleMenu(roleId)
       const roleMenuList = data.data
+      const checkedMenu: any[] = []
       roleMenuList.forEach((item: any) => {
         if (item.selected) {
-          this.defaultCheckedKeys.push(item.id)
+          checkedMenu.push(item.id)
         }
         const subMenuList = item.subMenuList
         if (subMenuList) {
           subMenuList.forEach((subMenu: any) => {
             if (subMenu.selected) {
-              this.defaultCheckedKeys.push(subMenu.id)
+              checkedMenu.push(subMenu.id)
             }
           })
         }
       })
-      this.$nextTick(() => {
-        (this.$refs.menuNodes as any).setCheckedKeys(this.defaultCheckedKeys)
-      })
+      this.defaultCheckedKeys = checkedMenu
     }
   }
 })

@@ -32,6 +32,11 @@ const routes: Array<RouteConfig> = [
         component: () => import(/* webpackChunkName: 'role' */'@/views/role/allocMenu.vue')
       },
       {
+        path: '/alloc-resource/:id',
+        name: 'alloc-resource',
+        component: () => import(/* webpackChunkName: 'role' */'@/views/role/allocResource.vue')
+      },
+      {
         path: '/menu',
         name: 'menu',
         component: () => import(/* webpackChunkName: 'menu' */'@/views/menu/index.vue')

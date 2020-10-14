@@ -162,7 +162,7 @@ export default Vue.extend({
     handleAllocResource (row: any) {
       console.log(row)
       this.$router.push({
-        name: 'alloc-menu',
+        name: 'alloc-resource',
         params: {
           id: row.id
         }
