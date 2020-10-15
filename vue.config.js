@@ -15,6 +15,10 @@ module.exports = {
       '/front': {
         target: 'http://edufront.lagou.com',
         changeOrigin: true// 把请求头中的host配置为target
+      },
+      '/posts': {
+        target: 'https://jsonplaceholder.typicode.com',
+        changeOrigin: true// 把请求头中的host配置为target
       }
     }
   }
