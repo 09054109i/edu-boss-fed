@@ -124,7 +124,8 @@
             </div>
             <el-form ref="form" :model="form" label-width="80px">
                 <el-form-item label="课程详情:">
-                    <el-input v-model="form.courseDescriptionMarkDown"></el-input>
+                    <quill-editor v-model="form.courseDescriptionMarkDown" ref="myQuillEditor" style="height: 500px;" :options="editorOption">
+                    </quill-editor>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -134,10 +135,17 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import { createOrUpdateCourse } from '@/services/course'
+import { quillEditor } from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+import { createOrUpdateCourse, getEditCourseInfo } from '@/services/course'
 
 export default Vue.extend({
   name: 'MenuCreateOrEdit',
+  components: {
+    quillEditor
+  },
   props: {
     isEdit: {
       type: Boolean,
@@ -180,13 +188,22 @@ export default Vue.extend({
       },
       dialogVisible: false,
       fileLimitedNumber: 1,
+      editorOption: {},
       parentMenuList: []
     }
   },
   created () {
-    // this.loadMenuInfo()
+    this.loadCourseInfo()
   },
   methods: {
+    async loadCourseInfo () {
+      if (this.isEdit) {
+        const { data } = await getEditCourseInfo(this.$route.params.id)
+        if (data.code === '000000') {
+          this.form = data.data
+        }
+      }
+    },
     async onSubmit () {
       const { data } = await createOrUpdateCourse(this.form)
       if (data.code === '000000') {

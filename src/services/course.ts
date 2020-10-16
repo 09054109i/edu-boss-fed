@@ -12,12 +12,23 @@ export const getAllCourses = (data: any) => {
   })
 }
 
-export const getEditCourseInfo = (id: string | number = -1) => {
+export const getEditCourseInfo = (id: string) => {
   return request({
     method: 'GET',
-    url: '/boss/course/getEditCourseInfo',
+    url: '/boss//course/getCourseById',
     params: {
-      id
+      courseId: id
+    }
+  })
+}
+
+export const changeState = (id: number, status: number) => {
+  return request({
+    method: 'GET',
+    url: '/boss//course/changeState',
+    params: {
+      courseId: id,
+      status
     }
   })
 }

@@ -3,11 +3,11 @@
      <el-card class="box-card">
       <div slot="header" class="clearfix">
          <el-form ref="form" :inline="true" :model="form" class="demo-form-inline">
-            <el-form-item prop="courseName" label="资源名称">
-                <el-input v-model="form.courseName" placeholder="资源名称"></el-input>
+            <el-form-item prop="courseName" label="课程名称">
+                <el-input v-model="form.courseName" placeholder="课程名称"></el-input>
             </el-form-item>
-            <el-form-item prop="status" label="资源分类">
-                <el-select v-model="form.status" placeholder="资源分类">
+            <el-form-item prop="status" label="课程分类">
+                <el-select v-model="form.status" placeholder="课程分类">
                 <el-option
                 :label="status.name"
                 :value="status.value"
@@ -56,6 +56,10 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
+              :class="[!scope.row.status? 'el-button--success' : 'el-button--danger']"
+              @click="changeState(scope)">{{scope.row.status?'下架':'上架'}}</el-button>
+            <el-button
+              size="mini"
               @click="handleEdit(scope.row)">编辑</el-button>
           </template>
         </el-table-column>
@@ -65,13 +69,13 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import { getAllCourses } from '@/services/course'
+import { getAllCourses, changeState } from '@/services/course'
 
 export default Vue.extend({
   name: 'CoursesIndex',
   data () {
     return {
-      course: [],
+      course: [] as any[],
       statusList: [
         {
           name: '全部',
@@ -116,11 +120,24 @@ export default Vue.extend({
     },
     handleEdit (row: any) {
       (this as any).$router.push({
-        name: 'menu-edit',
+        name: 'course-edit',
         params: {
           id: row.id
         }
       })
+    },
+    async changeState (scope: any) {
+      const index = scope.$index
+      const row = scope.row
+      const changeStatus = row.status ? 0 : 1
+
+      console.log(scope.$index)
+      const { data } = await changeState(row.id, changeStatus)
+      row.status = changeStatus
+      if (data.code === '000000') {
+        this.$set(this.course, index, row)
+        // this.course[2].status = changeStatus
+      }
     }
   }
 })
