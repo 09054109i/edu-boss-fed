@@ -66,8 +66,8 @@ export default Vue.extend({
     }
   },
   mounted () {
-    const routesMap = store.state.routes[0].children
-    routesMap.forEach(item => {
+    const routesMap = (store.state.routes[0] as any).children
+    routesMap.forEach((item: any) => {
       if (item.meta.menu.includes('权限')) {
         this.menus.RoleMenuShow = true
       } else if (item.meta.menu.includes('课程')) {
