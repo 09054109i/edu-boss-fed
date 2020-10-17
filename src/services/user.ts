@@ -32,6 +32,11 @@ export const getUserRoleInfo = (id: number) => request({
   url: `/boss/role/user/${id}`
 })
 
+export const getAllRole = () => request({
+  method: 'GET',
+  url: '/boss/role/all'
+})
+
 export const allocateUserRole = (data: any) => request({
   method: 'POST',
   url: '/boss/role/allocateUserRoles',

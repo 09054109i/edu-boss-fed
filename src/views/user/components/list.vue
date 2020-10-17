@@ -23,6 +23,24 @@
             </el-form-item>
         </el-form>
       </div>
+      <el-dialog title="分配角色" :visible.sync="dialogFormVisible">
+        <el-form ref="newForm" :model="newForm">
+          <el-form-item prop="roleIdList" label="资源分类：" :label-width="formLabelWidth">
+                  <el-select v-model="newForm.roleIdList" multiple placeholder="资源分类">
+                    <el-option
+                    :label="role.name"
+                    :value="role.id"
+                    v-for = "role in allRoles"
+                    :key = "role.id"
+                    ></el-option>
+                  </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="onRoleUpdateCancel">取 消</el-button>
+          <el-button type="primary" @click="onRoleUpdateSubmit">确 定</el-button>
+        </div>
+      </el-dialog>
        <el-table
         :data="users"
         style="width: 100%"  v-loading="isLoading">
@@ -88,7 +106,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-import { getUserPages, getUserRoleInfo, allocateUserRole } from '@/services/user'
+import { getUserPages, getUserRoleInfo, allocateUserRole, getAllRole } from '@/services/user'
 
 import { parseDate2Str } from '@/utils/common'
 import { Form } from 'element-ui'
@@ -102,16 +120,47 @@ export default Vue.extend({
         currentPage: 1,
         pageSize: 5
       },
+      newForm: {
+        roleIdList: [] as any[],
+        userId: ''
+      },
       total: 0,
       users: [],
       isLoading: false,
-      formLabelWidth: '120px'
+      formLabelWidth: '120px',
+      allRoles: [],
+      userDefaultRoles: [],
+      dialogFormVisible: false
     }
   },
   created () {
     this.loadUsers()
   },
   methods: {
+    async onRoleUpdateSubmit () {
+      const { data } = await allocateUserRole(this.newForm)
+      if (data.code === '000000') {
+        this.$message.success('提交成功')
+        this.dialogFormVisible = false
+      }
+    },
+    onRoleUpdateCancel () {
+      this.dialogFormVisible = false
+    },
+    async handleAllocRoll (row: any) {
+      console.log(row)
+      this.dialogFormVisible = true
+      const { data } = await getAllRole()
+      if (data.code === '000000') {
+        this.allRoles = data.data
+        const { data: userInfoData } = await getUserRoleInfo(row.id)
+        if (userInfoData.code === '000000') {
+          const userRoles = userInfoData.data
+          this.newForm.roleIdList = userRoles.map((item: any) => item.id)
+          this.newForm.userId = row.id
+        }
+      }
+    },
     onReset () {
       (this.$refs.form as Form).resetFields()
       this.form.currentPage = 1
@@ -141,4 +190,7 @@ export default Vue.extend({
 })
 </script>
 <style scoped lang = "scss">
+.el-dialog {
+  width: 30%
+}
 </style>
